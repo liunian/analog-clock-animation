@@ -76,11 +76,17 @@ def run(start_hour=9, total_frames=55):
         # 更新进度展示在同一行
         print(f"\r[进度] 已完成 {i + 1} / {total_frames} 帧", end='')
 
+    # last frame
+    filename = os.path.join(frame_dir, f"frame_last.png")
+    draw_clock(start_hour+1, 0, 0, filename)
+    frame_paths.append(filename)
+
     print("\n✅ 帧图生成完毕，开始生成 GIF...")
 
     # 生成 GIF（每帧0.05秒，循环播放），文件名包含时间戳
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     gif_path = f"clock_{start_hour}_{total_frames}_{timestamp}.gif"
+    # loop=0 表示无限循环
     with imageio.get_writer(gif_path, mode='I', duration=0.05, loop=0) as writer:
         for i, path in enumerate(frame_paths):
             image = imageio.imread(path)
